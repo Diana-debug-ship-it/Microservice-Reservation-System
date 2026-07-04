@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
@@ -46,6 +47,9 @@ public class BookingEntity {
 
     @Column(name = "check_out_date", nullable = false)
     private LocalDate checkOutDate;
+
+    @Column(name = "total_price", nullable = false)
+    private BigDecimal totalPrice;
 
     @Column(name = "booking_preferences")
     private String bookingPreferences;
