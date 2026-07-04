@@ -34,6 +34,9 @@ public class BookingEntity {
     @Column(name = "room_id", nullable = false)
     private Long roomId;
 
+    @Column(name = "guests_count", nullable = false)
+    private Integer guestsCount;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private BookingStatus status;

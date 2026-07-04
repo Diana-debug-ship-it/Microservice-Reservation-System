@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 
 public record RoomRequestDto (
         String number,
-        BigDecimal pricePerNight
+        BigDecimal pricePerNight,
+        Integer maxGuests
 ) {
 }

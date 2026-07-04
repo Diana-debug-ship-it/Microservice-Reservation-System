@@ -39,5 +39,6 @@ public class RoomEntity {
     @JoinColumn(name = "hotel_id", nullable = false)
     private HotelEntity hotel;
 
-
+    @Column(name = "price_per_night", nullable = false)
+    private Integer maxGuests;
 }

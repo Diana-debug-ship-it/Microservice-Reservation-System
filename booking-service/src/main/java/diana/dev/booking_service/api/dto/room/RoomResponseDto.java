@@ -6,6 +6,7 @@ public record RoomResponseDto(
         Long id,
         Long hotelId,
         String number,
-        BigDecimal pricePerNight
+        BigDecimal pricePerNight,
+        Integer maxGuests
 ) {
 }
