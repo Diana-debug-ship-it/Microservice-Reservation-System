@@ -1,4 +1,4 @@
-package diana.dev.booking_service.domain;
+package diana.dev.booking_service.domain.db.mapper;
 
 
 import diana.dev.booking_service.api.dto.hotel.HotelRequestDto;
