@@ -8,5 +8,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface HotelRepository extends JpaRepository<HotelEntity, Long> {
     boolean existsByNameAndAddress(@NotNull String name, @NotNull String address);
 
-    boolean existsById(@NonNull Long hotelId);
 }

@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +20,7 @@ public class HotelController {
 
     private final HotelService hotelService;
 
+    @PostMapping
     public ResponseEntity<HotelResponseDto> create(
             @Valid @RequestBody HotelRequestDto request
     ) {
@@ -30,6 +28,7 @@ public class HotelController {
         return ResponseEntity.status(HttpStatus.CREATED).body(hotelService.createHotel(request));
     }
 
+    @GetMapping("/{id}")
     public ResponseEntity<HotelResponseDto> getById(
             @PathVariable("id") Long id
     ) {
@@ -37,6 +36,7 @@ public class HotelController {
         return ResponseEntity.status(HttpStatus.OK).body(hotelService.getHotelById(id));
     }
 
+    @GetMapping
     public ResponseEntity<List<HotelResponseDto>> getAll() {
         log.info("Retrieving all hotels");
         return ResponseEntity.status(HttpStatus.OK).body(hotelService.getAllHotels());
