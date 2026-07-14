@@ -4,6 +4,7 @@ package diana.dev.booking_service.domain;
 import diana.dev.booking_service.api.dto.hotel.HotelRequestDto;
 import diana.dev.booking_service.api.dto.hotel.HotelResponseDto;
 import diana.dev.booking_service.domain.db.entity.HotelEntity;
+import diana.dev.booking_service.domain.db.mapper.HotelMapper;
 import diana.dev.booking_service.domain.db.repository.HotelRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,12 @@ public class HotelService {
 
     private final HotelRepository hotelRepository;
     private final HotelMapper mapper;
+
+    public void validateHotelExists(Long id) {
+        if (!hotelRepository.existsById(id)) {
+            throw new EntityNotFoundException("Not found hotel by id=" + id);
+        }
+    }
 
     public HotelResponseDto createHotel(HotelRequestDto request) {
 

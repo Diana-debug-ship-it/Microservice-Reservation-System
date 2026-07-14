@@ -19,15 +19,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoomService {
 
-    private final HotelRepository hotelRepository;
+    private final HotelService hotelService;
     private final RoomRepository roomRepository;
     private final RoomMapper mapper;
 
     public RoomResponseDto createRoom(Long hotelId, RoomRequestDto request) {
 
-        HotelEntity hotelEntity = hotelRepository.findById(hotelId).orElseThrow(
-                () -> new EntityNotFoundException("Not found hotel by id="+hotelId)
-        );
+        hotelService.validateHotelExists(hotelId);
 
         RoomEntity entityToSave = mapper.toEntity(request);
 
@@ -51,9 +49,7 @@ public class RoomService {
 
     public List<RoomResponseDto> getAllRooms(Long hotelId) {
 
-        HotelEntity entity = hotelRepository.findById(hotelId).orElseThrow(
-                () -> new EntityNotFoundException("Not found hotel by id="+hotelId)
-        );
+        hotelService.validateHotelExists(hotelId);
 
         List<RoomEntity> roomEntityList = roomRepository.findByHotelId(hotelId);
 
