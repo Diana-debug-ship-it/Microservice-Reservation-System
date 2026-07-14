@@ -1,7 +1,7 @@
-package diana.dev.booking_service.domain.db;
+package diana.dev.booking_service.domain.db.entity;
 
 
-import diana.dev.booking_service.domain.BookingStatus;
+import diana.dev.shared.http.booking.BookingStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
