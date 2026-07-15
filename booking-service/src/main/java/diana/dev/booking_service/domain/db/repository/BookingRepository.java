@@ -13,7 +13,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
 
     @Query(
             """
-                    SELECT COUNT(b) > 0 BookingEntity b
+                    SELECT COUNT(b) > 0
                     FROM BookingEntity b
                     WHERE b.roomId = :roomId
                     AND b.status != 'CANCELLED'
