@@ -16,7 +16,7 @@ public interface RoomMapper {
 
     RoomEntity toEntity(RoomRequestDto requestDto);
 
-    @Mapping(target = "hotelId", source = "entity.hotel.id")
+    @Mapping(target = "hotelId", source = "hotel.id")
     RoomResponseDto toRoomDto(RoomEntity entity);
 
 }

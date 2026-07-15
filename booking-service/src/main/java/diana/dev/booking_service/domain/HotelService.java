@@ -27,6 +27,11 @@ public class HotelService {
         }
     }
 
+    public HotelEntity getHotelReference(Long hotelId){
+        validateHotelExists(hotelId);
+        return hotelRepository.getReferenceById(hotelId);
+    }
+
     public HotelResponseDto createHotel(HotelRequestDto request) {
 
         if (hotelRepository.existsByNameAndAddress(request.name(), request.address())) {

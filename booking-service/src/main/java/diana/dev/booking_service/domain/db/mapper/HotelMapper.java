@@ -8,7 +8,8 @@ import org.mapstruct.*;
 
 @Mapper(
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        componentModel = MappingConstants.ComponentModel.SPRING
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        uses = RoomMapper.class
 )
 public interface HotelMapper {
 

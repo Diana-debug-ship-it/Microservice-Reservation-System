@@ -1,7 +1,9 @@
 package diana.dev.booking_service.domain;
 
+import diana.dev.booking_service.api.dto.hotel.HotelResponseDto;
 import diana.dev.booking_service.api.dto.room.RoomRequestDto;
 import diana.dev.booking_service.api.dto.room.RoomResponseDto;
+import diana.dev.booking_service.domain.db.entity.HotelEntity;
 import diana.dev.booking_service.domain.db.entity.RoomEntity;
 import diana.dev.booking_service.domain.db.mapper.RoomMapper;
 import diana.dev.booking_service.domain.db.repository.RoomRepository;
@@ -24,9 +26,10 @@ public class RoomService {
 
     public RoomResponseDto createRoom(Long hotelId, RoomRequestDto request) {
 
-        hotelService.validateHotelExists(hotelId);
+        HotelEntity hotelEntity = hotelService.getHotelReference(hotelId);
 
         RoomEntity entityToSave = mapper.toEntity(request);
+        entityToSave.setHotel(hotelEntity);
 
         RoomEntity saved = roomRepository.save(entityToSave);
         log.info("Created room with id={}", saved.getId());
