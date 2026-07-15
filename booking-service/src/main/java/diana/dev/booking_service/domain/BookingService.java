@@ -25,7 +25,7 @@ public class BookingService {
     private final BookingRepository repository;
     private final BookingMapper mapper;
 
-    public BookingDto createBooking(CreateBookingRequestDto request, BigDecimal pricePerNight) {
+    public BookingDto createBooking(Long hotelId, CreateBookingRequestDto request, BigDecimal pricePerNight) {
 
         LocalDate checkIn = request.checkInDate();
         LocalDate checkOut = request.checkOutDate();
@@ -51,7 +51,8 @@ public class BookingService {
 
         BookingEntity savedEntity = repository.save(entityToSave);
         log.info("Created booking with id={}", savedEntity.getId());
-        return mapper.toBookingDto(savedEntity);
+
+        return mapper.toBookingDto(savedEntity, hotelId);
     }
 
     public BookingDto getBookingById(Long hotelId, Long bookingId) {
@@ -61,14 +62,14 @@ public class BookingService {
         );
 
         log.info("Retrieved booking by id={} for hotel id={}", bookingId, hotelId);
-        return mapper.toBookingDto(entity);
+        return mapper.toBookingDto(entity, hotelId);
     }
 
     public List<BookingDto> getAllBookings(Long hotelId) {
 
         List<BookingEntity> entities = repository.findAllByHotelId(hotelId);
         log.info("Retrieved all bookings in hotel by id={}", hotelId);
-        return entities.stream().map(mapper::toBookingDto).toList();
+        return entities.stream().map(entity -> mapper.toBookingDto(entity, hotelId)).toList();
 
     }
 

@@ -24,7 +24,7 @@ public class BookingProcessor {
 
         RoomResponseDto room = roomService.getRoomById(hotelId, request.roomId());
 
-        return bookingService.createBooking(request, room.pricePerNight());
+        return bookingService.createBooking(hotelId, request, room.pricePerNight());
 
     }
 

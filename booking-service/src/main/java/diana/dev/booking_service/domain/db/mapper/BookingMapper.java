@@ -3,6 +3,7 @@ package diana.dev.booking_service.domain.db.mapper;
 import diana.dev.booking_service.api.dto.booking.BookingDto;
 import diana.dev.booking_service.domain.db.entity.BookingEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
@@ -12,6 +13,7 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface BookingMapper {
 
-    BookingDto toBookingDto(BookingEntity entity);
+    @Mapping(target = "hotelId", source = "hotelId")
+    BookingDto toBookingDto(BookingEntity entity, Long hotelId);
 
 }
