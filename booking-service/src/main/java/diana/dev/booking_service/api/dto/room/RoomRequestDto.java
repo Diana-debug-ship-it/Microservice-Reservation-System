@@ -6,15 +6,15 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 public record RoomRequestDto (
-        @NotNull
+        @NotNull(message = "Room number is required")
         String number,
 
-        @NotNull
-        @Positive
+        @NotNull(message = "Price per night is required")
+        @Positive(message = "Price per night must be greater than 0")
         BigDecimal pricePerNight,
 
-        @NotNull
-        @Positive
+        @NotNull(message = "Max guests is required")
+        @Positive(message = "Max guests must be greater than 0")
         Integer maxGuests
 ) {
 }

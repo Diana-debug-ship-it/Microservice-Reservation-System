@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {
 				"diana.dev.booking_service",
-				"diana.dev.shared"
+				"diana.dev.shared.exception"
 })
 public class BookingServiceApplication {
 

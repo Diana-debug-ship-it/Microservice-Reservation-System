@@ -65,14 +65,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleValidationException(MethodArgumentNotValidException e) {
         log.error("Handle MethodArgumentNotValidException", e);
 
-        // Красиво собираем ошибки полей в одну строчку: "room: Не должно быть пустым, guests: Должно быть больше 0"
         String validationErrors = e.getBindingResult().getFieldErrors().stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining(", "));
 
         var errorDto = new ErrorResponseDto(
                 "Validation Failed",
-                validationErrors, // Клиент увидит только понятные сообщения
+                validationErrors,
                 LocalDateTime.now()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);

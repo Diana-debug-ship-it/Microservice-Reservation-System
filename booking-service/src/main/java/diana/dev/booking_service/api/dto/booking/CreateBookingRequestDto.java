@@ -8,19 +8,19 @@ import jakarta.validation.constraints.Positive;
 import java.time.LocalDate;
 
 public record CreateBookingRequestDto(
-    @NotNull
+    @NotNull(message = "Room ID is required")
     Long roomId,
 
-    @NotNull
-    @Positive
+    @NotNull(message = "Guests number is required")
+    @Positive(message = "Guests count must be greater than 0")
     Integer guests,
 
-    @NotNull
-    @FutureOrPresent
+    @NotNull(message = "Check-in date is required")
+    @FutureOrPresent(message = "Check-in date must be today or in the future")
     LocalDate checkInDate,
 
-    @NotNull
-    @Future
+    @NotNull(message = "Check-out date is required")
+    @Future(message = "Check-out date must be in the future")
     LocalDate checkOutDate,
 
     String bookingPreferences
