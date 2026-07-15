@@ -1,6 +1,6 @@
 package diana.dev.booking_service.api.dto.booking;
 
-import diana.dev.booking_service.domain.BookingStatus;
+import diana.dev.shared.http.booking.BookingStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
