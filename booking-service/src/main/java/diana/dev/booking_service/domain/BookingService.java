@@ -42,7 +42,7 @@ public class BookingService {
                 null,
                 roomId,
                 request.guests(),
-                BookingStatus.PENDING,
+                BookingStatus.PENDING_PAYMENT,
                 checkIn,
                 checkOut,
                 totalPrice,
@@ -81,5 +81,18 @@ public class BookingService {
         }
 
         return pricePerNight.multiply(BigDecimal.valueOf(days));
+    }
+
+    public BookingDto updateBookingStatus(Long hotelId, Long bookingId, BookingStatus status) {
+
+        BookingEntity entity = repository.findByIdAndHotelId(bookingId, hotelId).orElseThrow(
+                () -> new EntityNotFoundException("Not found booking by id " + bookingId + " in hotel " + hotelId)
+        );
+        log.info("Updating booking by id={} for hotel id={}", bookingId, hotelId);
+
+        entity.setStatus(status);
+        var updated = repository.save(entity);
+
+        return mapper.toBookingDto(updated, hotelId);
     }
 }

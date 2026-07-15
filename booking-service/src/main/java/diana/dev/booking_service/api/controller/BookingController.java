@@ -1,6 +1,7 @@
 package diana.dev.booking_service.api.controller;
 
 
+import diana.dev.booking_service.api.dto.BookingPaymentRequest;
 import diana.dev.booking_service.api.dto.booking.BookingDto;
 import diana.dev.booking_service.api.dto.booking.CreateBookingRequestDto;
 import diana.dev.booking_service.domain.BookingProcessor;
@@ -46,6 +47,16 @@ public class BookingController {
     ) {
         log.info("Retrieving all bookings");
         return ResponseEntity.status(HttpStatus.OK).body(bookingProcessor.getAllBookings(hotelId));
+    }
+
+    @PostMapping("/{bookingId}/pay")
+    public ResponseEntity<BookingDto> payBooking(
+            @PathVariable("hotelId") Long hotelId,
+            @PathVariable("bookingId") Long bookingId,
+            @Valid @RequestBody BookingPaymentRequest request
+            ) {
+        log.info("Paying booking with id={}, request={}", bookingId, request);
+        return ResponseEntity.status(HttpStatus.OK).body(bookingProcessor.processPayment(hotelId, bookingId, request));
     }
 
 }
