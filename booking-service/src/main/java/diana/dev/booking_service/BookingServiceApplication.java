@@ -3,7 +3,10 @@ package diana.dev.booking_service;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {
+				"diana.dev.booking_service",
+				"diana.dev.shared"
+})
 public class BookingServiceApplication {
 
 	public static void main(String[] args) {
