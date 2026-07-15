@@ -51,8 +51,18 @@ services:
       timeout: 5s
       start_period: 30s
       retries: 5
+  redis:
+    image: redis:7-alpine
+    container_name: reservation-system-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    command: redis-server --notify-keyspace-events Ex
 
 
 volumes:
   postgres_data:
   kafka_data:
+  redisdata:
