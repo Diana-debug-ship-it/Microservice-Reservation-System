@@ -2,16 +2,15 @@ package diana.dev.booking_service.domain;
 
 import diana.dev.booking_service.api.dto.room.RoomRequestDto;
 import diana.dev.booking_service.api.dto.room.RoomResponseDto;
-import diana.dev.booking_service.domain.db.entity.HotelEntity;
 import diana.dev.booking_service.domain.db.entity.RoomEntity;
 import diana.dev.booking_service.domain.db.mapper.RoomMapper;
-import diana.dev.booking_service.domain.db.repository.HotelRepository;
 import diana.dev.booking_service.domain.db.repository.RoomRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -56,5 +55,13 @@ public class RoomService {
         log.info("Retrieved all rooms in the hotel id={}", hotelId);
 
         return roomEntityList.stream().map(mapper::toRoomDto).toList();
+    }
+
+    public BigDecimal getRoomPrice(Long hotelId, Long roomId) {
+        RoomEntity roomEntity = roomRepository.findByIdAndHotelId(roomId, hotelId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Not found room id=" + roomId + " in hotel id=" + hotelId)
+                );
+        return roomEntity.getPricePerNight();
     }
 }
