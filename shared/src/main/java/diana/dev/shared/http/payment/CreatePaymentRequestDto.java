@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 public record CreatePaymentRequestDto(
         Long bookingId,
         BigDecimal amount,
+        PaymentMethod paymentMethod,
         PaymentDetailsDto paymentDetails
 ) {
 }

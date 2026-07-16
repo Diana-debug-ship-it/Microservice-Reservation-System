@@ -55,7 +55,8 @@ public class BookingProcessor {
             var response = paymentHttpClient.createPayment(new CreatePaymentRequestDto(
                     bookingId,
                     booking.totalPrice(),
-                    request.paymentMethod()
+                    request.paymentMethod(),
+                    request.details()
             ));
 
             var status = response.status().equals(PaymentStatus.PAYMENT_SUCCEEDED)
