@@ -6,6 +6,7 @@ import diana.dev.booking_service.api.dto.booking.BookingDto;
 import diana.dev.booking_service.api.dto.booking.CreateBookingRequestDto;
 import diana.dev.booking_service.api.dto.room.RoomResponseDto;
 import diana.dev.booking_service.external.PaymentHttpClient;
+import diana.dev.shared.exception.ErrorResponseDto;
 import diana.dev.shared.http.booking.BookingStatus;
 import diana.dev.shared.http.payment.CreatePaymentRequestDto;
 import diana.dev.shared.http.payment.PaymentStatus;
@@ -13,6 +14,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -22,9 +25,9 @@ import java.util.List;
 public class BookingProcessor {
 
     private final BookingService bookingService;
-    private final HotelService hotelService;
     private final RoomService roomService;
     private final PaymentHttpClient paymentHttpClient;
+    private final ObjectMapper objectMapper;
 
 
     public BookingDto createBooking(Long hotelId, CreateBookingRequestDto request) {
@@ -64,9 +67,18 @@ public class BookingProcessor {
                     : BookingStatus.CANCELLED;
 
             return bookingService.updateBookingStatus(hotelId, bookingId, status);
+        } catch (HttpStatusCodeException e) {
+
+            String rawJson = e.getResponseBodyAsString();
+            ErrorResponseDto paymentError = objectMapper.readValue(rawJson, ErrorResponseDto.class);
+            String cleanMessage = paymentError.detailedMessage();
+            throw new IllegalArgumentException(cleanMessage);
+
         } catch (Exception e) {
+
             log.error("Payment failed for booking id={}. Cancelling booking.", bookingId, e);
             throw new IllegalArgumentException("Payment failed: " + e.getMessage());
+
         }
 
     }

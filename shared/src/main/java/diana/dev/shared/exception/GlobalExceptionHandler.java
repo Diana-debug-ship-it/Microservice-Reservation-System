@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -75,5 +76,19 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
+    }
+
+    @ExceptionHandler(RejectedExecutionException.class)
+    public ResponseEntity<ErrorResponseDto> handlePaymentRejected(RejectedExecutionException e) {
+        log.error("Handle Payment Rejected", e);
+
+        var errorDto = new ErrorResponseDto(
+                "Payment Rejected",
+                e.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(errorDto);
     }
 }
