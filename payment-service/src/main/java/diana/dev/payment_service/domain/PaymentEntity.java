@@ -4,10 +4,7 @@ package diana.dev.payment_service.domain;
 import diana.dev.shared.http.payment.PaymentMethod;
 import diana.dev.shared.http.payment.PaymentStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,6 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "payments")
+@Builder
 public class PaymentEntity {
 
     @Id
@@ -38,6 +36,9 @@ public class PaymentEntity {
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
+
+    @Column(name = "transaction_id")
+    private String transactionId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_method", nullable = false)

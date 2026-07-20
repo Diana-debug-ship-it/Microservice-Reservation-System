@@ -1,12 +1,15 @@
 package diana.dev.shared.http.payment;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public record CreatePaymentResponseDto(
         Long paymentId,
-        PaymentStatus status,
         Long bookingId,
+        String transactionId,
         PaymentMethod paymentMethod,
-        BigDecimal amount
+        PaymentStatus status,
+        BigDecimal amount,
+        LocalDateTime createdAt
 ) {
 }
