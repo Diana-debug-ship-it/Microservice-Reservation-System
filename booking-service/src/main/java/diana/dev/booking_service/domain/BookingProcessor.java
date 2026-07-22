@@ -9,15 +9,15 @@ import diana.dev.booking_service.external.PaymentHttpClient;
 import diana.dev.shared.exception.ErrorResponseDto;
 import diana.dev.shared.http.booking.BookingStatus;
 import diana.dev.shared.http.payment.CreatePaymentRequestDto;
-import diana.dev.shared.http.payment.PaymentStatus;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -26,16 +26,24 @@ public class BookingProcessor {
 
     private final BookingService bookingService;
     private final RoomService roomService;
+
     private final PaymentHttpClient paymentHttpClient;
+
     private final ObjectMapper objectMapper;
+
+    private final StringRedisTemplate stringRedisTemplate;
+    private final static String CACHE_KEY_PREFIX = "booking:expired:";
+    private final static long CACHE_TTL_MINUTES = 15;
 
 
     public BookingDto createBooking(Long hotelId, CreateBookingRequestDto request) {
 
         RoomResponseDto room = roomService.getRoomById(hotelId, request.roomId());
+        var createdBooking = bookingService.createBooking(hotelId, request, room.pricePerNight());
 
-        return bookingService.createBooking(hotelId, request, room.pricePerNight());
+        cacheReservation(createdBooking);
 
+        return createdBooking;
     }
 
     public BookingDto getBookingById(Long id, Long bookingId) {
@@ -62,13 +70,12 @@ public class BookingProcessor {
                     request.details()
             ));
 
-            var status = response.status().equals(PaymentStatus.PAYMENT_SUCCEEDED)
-                    ? BookingStatus.CONFIRMED
-                    : BookingStatus.CANCELLED;
+            cancelExpirationTimer(bookingId);
+            return bookingService.updateBookingStatus(hotelId, bookingId, BookingStatus.CONFIRMED);
 
-            return bookingService.updateBookingStatus(hotelId, bookingId, status);
         } catch (HttpStatusCodeException e) {
 
+            log.error("Payment failed for booking id={}", bookingId, e);
             String rawJson = e.getResponseBodyAsString();
             ErrorResponseDto paymentError = objectMapper.readValue(rawJson, ErrorResponseDto.class);
             String cleanMessage = paymentError.detailedMessage();
@@ -76,10 +83,23 @@ public class BookingProcessor {
 
         } catch (Exception e) {
 
-            log.error("Payment failed for booking id={}. Cancelling booking.", bookingId, e);
+            log.error("Payment failed for booking id={}", bookingId, e);
             throw new IllegalArgumentException("Payment failed: " + e.getMessage());
 
         }
 
+    }
+
+    private void cancelExpirationTimer(Long bookingId) {
+        log.info("Booking timer cancelled in Redis for booking id={}", bookingId);
+        var cacheKey = CACHE_KEY_PREFIX + bookingId;
+        stringRedisTemplate.delete(cacheKey);
+    }
+
+    private void cacheReservation(BookingDto bookingDto) {
+        log.info("Booking timer added in Redis for booking id={}", bookingDto.id());
+        var cacheKey = CACHE_KEY_PREFIX + bookingDto.id();
+        stringRedisTemplate.opsForValue()
+                .set(cacheKey, String.valueOf(bookingDto.hotelId()), CACHE_TTL_MINUTES, TimeUnit.MINUTES);
     }
 }
