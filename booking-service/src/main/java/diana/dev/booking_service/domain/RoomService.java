@@ -1,6 +1,6 @@
 package diana.dev.booking_service.domain;
 
-import diana.dev.booking_service.api.dto.hotel.HotelResponseDto;
+import diana.dev.booking_service.api.dto.BookingDetailsSnapshot;
 import diana.dev.booking_service.api.dto.room.RoomRequestDto;
 import diana.dev.booking_service.api.dto.room.RoomResponseDto;
 import diana.dev.booking_service.domain.db.entity.HotelEntity;
@@ -66,5 +66,13 @@ public class RoomService {
                         () -> new EntityNotFoundException("Not found room id=" + roomId + " in hotel id=" + hotelId)
                 );
         return roomEntity.getPricePerNight();
+    }
+
+    public BookingDetailsSnapshot getRoomDetailsForBooking(
+            Long hotelId, Long roomId
+    ) {
+        return roomRepository.getSnapshotForBooking(hotelId, roomId).orElseThrow(
+                () -> new EntityNotFoundException("Not found room id=" + roomId + " in hotel id=" + hotelId)
+        );
     }
 }
