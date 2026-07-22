@@ -8,7 +8,9 @@ import java.time.LocalDate;
 public record BookingDto(
         Long id,
         Long roomId,
+        String roomNumber,
         Long hotelId,
+        String hotelName,
         Integer guests,
         LocalDate checkInDate,
         LocalDate checkOutDate,
