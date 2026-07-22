@@ -1,17 +1,25 @@
 package diana.dev.booking_service.domain;
 
 
+import diana.dev.booking_service.api.dto.BookingDetailsSnapshot;
 import diana.dev.booking_service.api.dto.BookingPaymentRequest;
 import diana.dev.booking_service.api.dto.booking.BookingDto;
 import diana.dev.booking_service.api.dto.booking.CreateBookingRequestDto;
 import diana.dev.booking_service.api.dto.room.RoomResponseDto;
+import diana.dev.booking_service.domain.db.entity.BookingEntity;
+import diana.dev.booking_service.domain.db.entity.HotelEntity;
+import diana.dev.booking_service.domain.db.entity.RoomEntity;
 import diana.dev.booking_service.external.PaymentHttpClient;
+import diana.dev.booking_service.kafka.BookingConfirmedEventProducer;
 import diana.dev.shared.exception.ErrorResponseDto;
 import diana.dev.shared.http.booking.BookingStatus;
 import diana.dev.shared.http.payment.CreatePaymentRequestDto;
+import diana.dev.shared.kafka.BookingConfirmedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import tools.jackson.databind.ObjectMapper;
@@ -35,11 +43,15 @@ public class BookingProcessor {
     private final static String CACHE_KEY_PREFIX = "booking:expired:";
     private final static long CACHE_TTL_MINUTES = 15;
 
+    private final BookingConfirmedEventProducer bookingConfirmedEventProducer;
+
 
     public BookingDto createBooking(Long hotelId, CreateBookingRequestDto request) {
 
-        RoomResponseDto room = roomService.getRoomById(hotelId, request.roomId());
-        var createdBooking = bookingService.createBooking(hotelId, request, room.pricePerNight());
+
+        BookingDetailsSnapshot details = roomService.getRoomDetailsForBooking(hotelId, request.roomId());
+
+        var createdBooking = bookingService.createBooking(hotelId, request, details);
 
         cacheReservation(createdBooking);
 

@@ -1,6 +1,7 @@
 package diana.dev.booking_service.domain;
 
 
+import diana.dev.booking_service.api.dto.BookingDetailsSnapshot;
 import diana.dev.booking_service.api.dto.booking.BookingDto;
 import diana.dev.booking_service.api.dto.booking.CreateBookingRequestDto;
 import diana.dev.booking_service.domain.db.entity.BookingEntity;
@@ -25,7 +26,7 @@ public class BookingService {
     private final BookingRepository repository;
     private final BookingMapper mapper;
 
-    public BookingDto createBooking(Long hotelId, CreateBookingRequestDto request, BigDecimal pricePerNight) {
+    public BookingDto createBooking(Long hotelId, CreateBookingRequestDto request, BookingDetailsSnapshot details) {
 
         LocalDate checkIn = request.checkInDate();
         LocalDate checkOut = request.checkOutDate();
@@ -36,11 +37,14 @@ public class BookingService {
                     checkIn + " - " + checkOut);
         }
 
-        BigDecimal totalPrice = calculateTotal(checkIn, checkOut, pricePerNight);
+        BigDecimal totalPrice = calculateTotal(checkIn, checkOut, details.pricePerNight());
 
         BookingEntity entityToSave = new BookingEntity(
                 null,
                 roomId,
+                details.roomNumber(),
+                hotelId,
+                details.hotelName(),
                 request.guests(),
                 BookingStatus.PENDING_PAYMENT,
                 checkIn,

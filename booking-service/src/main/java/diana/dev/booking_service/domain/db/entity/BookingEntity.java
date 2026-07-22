@@ -35,6 +35,15 @@ public class BookingEntity {
     @Column(name = "room_id", nullable = false)
     private Long roomId;
 
+    @Column(name = "room_number", nullable = false)
+    private String roomNumber;
+
+    @Column(name = "hotel_id", nullable = false)
+    private Long hotelId;
+
+    @Column(name = "hotel_name", nullable = false)
+    private String hotelName;
+
     @Column(name = "guests", nullable = false)
     private Integer guests;
 
