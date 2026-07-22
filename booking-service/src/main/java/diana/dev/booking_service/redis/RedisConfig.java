@@ -1,4 +1,4 @@
-package diana.dev.booking_service.config;
+package diana.dev.booking_service.redis;
 
 
 import org.springframework.context.annotation.Bean;

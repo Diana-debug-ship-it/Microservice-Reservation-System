@@ -1,8 +1,6 @@
-package diana.dev.booking_service.config;
+package diana.dev.booking_service.redis;
 
-import diana.dev.booking_service.api.dto.booking.BookingDto;
 import diana.dev.booking_service.domain.BookingService;
-import diana.dev.booking_service.domain.db.entity.BookingEntity;
 import diana.dev.booking_service.domain.db.repository.BookingRepository;
 import diana.dev.shared.http.booking.BookingStatus;
 import org.jspecify.annotations.Nullable;
