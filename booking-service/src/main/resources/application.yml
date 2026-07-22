@@ -23,3 +23,5 @@ spring:
 
 payment-service:
   base-url: http://localhost:8081
+
+booking-confirmed-topic: booking.confirmed.event
