@@ -12,6 +12,7 @@
     <modules>
         <module>booking-service</module>
         <module>payment-service</module>
+        <module>notification-service</module>
         <module>shared</module>
     </modules>
 
