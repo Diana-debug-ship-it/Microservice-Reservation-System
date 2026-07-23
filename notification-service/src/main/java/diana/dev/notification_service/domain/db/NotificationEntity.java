@@ -1,6 +1,8 @@
-package diana.dev.notification_service.domain;
+package diana.dev.notification_service.domain.db;
 
 
+import diana.dev.notification_service.domain.NotificationChannel;
+import diana.dev.notification_service.domain.NotificationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

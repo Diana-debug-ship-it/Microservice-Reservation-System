@@ -1,4 +1,4 @@
-package diana.dev.notification_service.domain;
+package diana.dev.notification_service.domain.db;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
