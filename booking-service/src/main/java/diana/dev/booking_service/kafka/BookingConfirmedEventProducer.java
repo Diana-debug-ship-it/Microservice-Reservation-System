@@ -2,11 +2,14 @@ package diana.dev.booking_service.kafka;
 
 import diana.dev.booking_service.api.dto.booking.BookingDto;
 import diana.dev.shared.kafka.BookingConfirmedEvent;
+import diana.dev.shared.kafka.NotificationChannel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -34,6 +37,7 @@ public class BookingConfirmedEventProducer {
                         .hotelName(bookingDto.hotelName())
                         .roomNumber(bookingDto.roomNumber())
                         .totalPrice(bookingDto.totalPrice())
+                        .channels(List.of(NotificationChannel.LOG))
                         .build()
 
         ).thenAccept(result -> {

@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LogNotificationSender implements NotificationSender{
     @Override
-    public NotificationChannel getChannel() {
-        return NotificationChannel.LOG;
+    public diana.dev.shared.kafka.NotificationChannel getChannel() {
+        return diana.dev.shared.kafka.NotificationChannel.LOG;
     }
 
     @Override

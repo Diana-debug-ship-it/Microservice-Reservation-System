@@ -4,6 +4,7 @@ import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Builder
 public record BookingConfirmedEvent(
@@ -14,6 +15,7 @@ public record BookingConfirmedEvent(
         BigDecimal totalPrice,
         LocalDate checkInDate,
         LocalDate checkOutDate,
-        Integer guestsCount
+        Integer guestsCount,
+        List<NotificationChannel> channels
 ) {
 }

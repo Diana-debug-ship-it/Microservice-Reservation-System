@@ -1,7 +1,7 @@
 package diana.dev.notification_service.kafka;
 
 
-import diana.dev.notification_service.domain.NotificationChannel;
+import diana.dev.shared.kafka.NotificationChannel;
 import diana.dev.notification_service.domain.NotificationService;
 import diana.dev.shared.kafka.BookingConfirmedEvent;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,10 @@ public class BookingConfirmedEventConsumer {
     )
     public void listen(BookingConfirmedEvent event) {
         log.info("Received booking confirmed event: {}", event);
-        notificationService.processBookingConfirmedEvent(event, NotificationChannel.LOG);
+
+        for (NotificationChannel channel: event.channels()) {
+            notificationService.processBookingConfirmedEvent(event, channel);
+        }
     }
 
 }

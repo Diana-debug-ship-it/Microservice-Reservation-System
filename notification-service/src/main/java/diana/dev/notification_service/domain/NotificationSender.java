@@ -4,7 +4,7 @@ import diana.dev.shared.kafka.BookingConfirmedEvent;
 
 public interface NotificationSender {
 
-    NotificationChannel getChannel();
+    diana.dev.shared.kafka.NotificationChannel getChannel();
 
     void send(String text, BookingConfirmedEvent event);
 

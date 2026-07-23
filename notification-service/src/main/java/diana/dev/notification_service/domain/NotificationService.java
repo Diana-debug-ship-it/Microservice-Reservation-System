@@ -20,7 +20,7 @@ public class NotificationService {
     private final List<NotificationSender> senders;
 
     public void processBookingConfirmedEvent(
-        BookingConfirmedEvent event, NotificationChannel channel
+        BookingConfirmedEvent event, diana.dev.shared.kafka.NotificationChannel channel
     ) {
         log.info("Processing Booking Confirmed Event {} for channel {}", event, channel);
 

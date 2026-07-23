@@ -1,7 +1,7 @@
 package diana.dev.notification_service.domain.db;
 
 
-import diana.dev.notification_service.domain.NotificationChannel;
+import diana.dev.shared.kafka.NotificationChannel;
 import diana.dev.notification_service.domain.NotificationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

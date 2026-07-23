@@ -1,4 +1,4 @@
-package diana.dev.notification_service.domain;
+package diana.dev.shared.kafka;
 
 public enum NotificationChannel {
     LOG,
