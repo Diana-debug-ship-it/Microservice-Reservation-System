@@ -76,7 +76,11 @@ public class BookingProcessor {
             ));
 
             cancelExpirationTimer(bookingId);
-            return bookingService.updateBookingStatus(hotelId, bookingId, BookingStatus.CONFIRMED);
+            BookingDto confirmedBooking = bookingService.updateBookingStatus(hotelId, bookingId, BookingStatus.CONFIRMED);
+
+            bookingConfirmedEventProducer.sendBookingConfirmedEvent(confirmedBooking);
+
+            return confirmedBooking;
 
         } catch (HttpStatusCodeException e) {
 
