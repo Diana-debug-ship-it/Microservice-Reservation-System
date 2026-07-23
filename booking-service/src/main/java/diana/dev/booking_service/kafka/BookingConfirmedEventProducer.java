@@ -1,8 +1,6 @@
 package diana.dev.booking_service.kafka;
 
 import diana.dev.booking_service.api.dto.booking.BookingDto;
-import diana.dev.booking_service.domain.db.entity.BookingEntity;
-import diana.dev.booking_service.domain.db.entity.HotelEntity;
 import diana.dev.shared.kafka.BookingConfirmedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
