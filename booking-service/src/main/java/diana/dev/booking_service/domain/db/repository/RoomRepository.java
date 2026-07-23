@@ -16,7 +16,7 @@ public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
 
 
     @Query("""
-            SELECT new diana.dev.booking_service.api.dto.BookingDetailsSnapshot(h.name, r.roomNumber, r.pricePerNight
+            SELECT new diana.dev.booking_service.api.dto.BookingDetailsSnapshot(h.name, r.number, r.pricePerNight)
             FROM RoomEntity r
             JOIN r.hotel h
             WHERE r.id = :roomId AND h.id = :hotelId
