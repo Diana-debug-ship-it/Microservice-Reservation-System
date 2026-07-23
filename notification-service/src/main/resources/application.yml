@@ -21,3 +21,5 @@ spring:
     consumer:
       group-id: booking-notification-group
     bootstrap-servers: localhost:9092
+
+booking-confirmed-topic: booking.confirmed.event
