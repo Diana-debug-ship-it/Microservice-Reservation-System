@@ -38,5 +38,7 @@ telegram:
     token: ${TELEGRAM_BOT_TOKEN:}
     test-chat-id: ${TELEGRAM_CHAT_ID:}
 
-
 booking-confirmed-topic: booking.confirmed.event
+
+notification:
+  test-email: ${NOTIFICATION_TEST_EMAIL:customer@example.com}
