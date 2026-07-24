@@ -1,12 +1,13 @@
-package diana.dev.notification_service.domain;
+package diana.dev.notification_service.domain.log;
 
+import diana.dev.notification_service.domain.NotificationSender;
 import diana.dev.shared.kafka.BookingConfirmedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class LogNotificationSender implements NotificationSender{
+public class LogNotificationSender implements NotificationSender {
     @Override
     public diana.dev.shared.kafka.NotificationChannel getChannel() {
         return diana.dev.shared.kafka.NotificationChannel.LOG;
