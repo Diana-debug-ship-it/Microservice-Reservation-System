@@ -22,4 +22,9 @@ spring:
       group-id: booking-notification-group
     bootstrap-servers: localhost:9092
 
+telegram:
+  bot:
+    token: ${TELEGRAM_BOT_TOKEN:}
+
+
 booking-confirmed-topic: booking.confirmed.event
