@@ -1,10 +1,8 @@
 package diana.dev.notification_service.telegram;
 
 import diana.dev.notification_service.domain.NotificationSender;
-import diana.dev.notification_service.domain.NotificationService;
 import diana.dev.shared.kafka.BookingConfirmedEvent;
 import diana.dev.shared.kafka.NotificationChannel;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
