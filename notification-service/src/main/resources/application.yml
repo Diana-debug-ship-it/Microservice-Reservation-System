@@ -16,6 +16,17 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  mail:
+    host: localhost
+    port: 1025
+    username: ""
+    password: ""
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
 
   kafka:
     consumer:
