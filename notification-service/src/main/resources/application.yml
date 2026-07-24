@@ -25,6 +25,7 @@ spring:
 telegram:
   bot:
     token: ${TELEGRAM_BOT_TOKEN:}
+    test-chat-id: ${TELEGRAM_CHAT_ID:}
 
 
 booking-confirmed-topic: booking.confirmed.event
