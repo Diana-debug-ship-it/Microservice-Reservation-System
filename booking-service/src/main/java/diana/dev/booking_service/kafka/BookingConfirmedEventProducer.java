@@ -37,7 +37,7 @@ public class BookingConfirmedEventProducer {
                         .hotelName(bookingDto.hotelName())
                         .roomNumber(bookingDto.roomNumber())
                         .totalPrice(bookingDto.totalPrice())
-                        .channels(List.of(NotificationChannel.LOG))
+                        .channels(List.of(NotificationChannel.LOG, NotificationChannel.TELEGRAM))
                         .build()
 
         ).thenAccept(result -> {
