@@ -55,7 +55,8 @@ public class HotelRepositoryTest {
     void existsByNameAndAddress_ShouldReturnTrue_WhenHotelAlreadyExists() {
 
         HotelEntity hotelToSave = new HotelEntity(null, "hotel", "address", List.of());
-        repository.save(hotelToSave);
+        entityManager.persistAndFlush(hotelToSave);
+        entityManager.clear();
 
         Assertions.assertTrue(repository.existsByNameAndAddress(hotelToSave.getName(), hotelToSave.getAddress()));
 
