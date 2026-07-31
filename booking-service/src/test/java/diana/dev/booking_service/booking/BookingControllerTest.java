@@ -9,6 +9,7 @@ import diana.dev.booking_service.domain.BookingProcessor;
 import diana.dev.shared.http.booking.BookingStatus;
 import diana.dev.shared.http.payment.CardDetailsDto;
 import diana.dev.shared.http.payment.PaymentMethod;
+import diana.dev.shared.http.payment.SbpDetailsDto;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -334,6 +335,121 @@ public class BookingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(paymentMethodNullJson))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void payBooking_ShouldReturnBadRequest_WhenCardIsNotValid() throws Exception {
+
+        Long hotelId = 2L;
+        Long bookingId = 5L;
+        String url = BASE_URL + "/{hotelId}/booking/{bookingId}/pay";
+
+        BookingPaymentRequest requestEmptyNumber = new BookingPaymentRequest(PaymentMethod.CARD, new CardDetailsDto("", "123"));
+        String requestEmptyNumberJson = objectMapper.writeValueAsString(requestEmptyNumber);
+
+        mockMvc.perform(post(url, hotelId, bookingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestEmptyNumberJson))
+                .andExpect(status().isBadRequest());
+
+
+        BookingPaymentRequest requestNumberUnder16Digits = new BookingPaymentRequest(PaymentMethod.CARD, new CardDetailsDto("2352", "123"));
+        String requestNumberUnder16DigitsJson = objectMapper.writeValueAsString(requestNumberUnder16Digits);
+
+        mockMvc.perform(post(url, hotelId, bookingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestNumberUnder16DigitsJson))
+                .andExpect(status().isBadRequest());
+
+
+        BookingPaymentRequest requestEmptyCvv = new BookingPaymentRequest(PaymentMethod.CARD, new CardDetailsDto("1234567812345678", ""));
+        String requestEmptyCvvJson = objectMapper.writeValueAsString(requestEmptyCvv);
+
+        mockMvc.perform(post(url, hotelId, bookingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestEmptyCvvJson))
+                .andExpect(status().isBadRequest());
+
+
+        BookingPaymentRequest requestCvvUnder3Digits = new BookingPaymentRequest(PaymentMethod.CARD, new CardDetailsDto("1234567812345678", "21"));
+        String requestCvvUnder3DigitsJson = objectMapper.writeValueAsString(requestCvvUnder3Digits);
+
+        mockMvc.perform(post(url, hotelId, bookingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestCvvUnder3DigitsJson))
+                .andExpect(status().isBadRequest());
+
+
+
+        BookingPaymentRequest requestNullCard = new BookingPaymentRequest(PaymentMethod.CARD, new CardDetailsDto(null, "123"));
+        String requestNullCardJson = objectMapper.writeValueAsString(requestNullCard);
+
+        mockMvc.perform(post(url, hotelId, bookingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestNullCardJson))
+                .andExpect(status().isBadRequest());
+
+
+        BookingPaymentRequest requestNullCvv = new BookingPaymentRequest(PaymentMethod.CARD, new CardDetailsDto("1234567812345678", null));
+        String requestNullCvvJson = objectMapper.writeValueAsString(requestNullCvv);
+
+        mockMvc.perform(post(url, hotelId, bookingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestNullCvvJson))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void payBooking_ShouldReturnBadRequest_WhenNumberIsNotValid() throws Exception {
+
+        Long hotelId = 2L;
+        Long bookingId = 5L;
+        String url = BASE_URL + "/{hotelId}/booking/{bookingId}/pay";
+
+        BookingPaymentRequest requestEmptyNumber = new BookingPaymentRequest(PaymentMethod.SBP, new SbpDetailsDto(""));
+        String requestEmptyNumberJson = objectMapper.writeValueAsString(requestEmptyNumber);
+
+        mockMvc.perform(post(url, hotelId, bookingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestEmptyNumberJson))
+                .andExpect(status().isBadRequest());
+
+
+        BookingPaymentRequest requestNullNumber = new BookingPaymentRequest(PaymentMethod.SBP, new SbpDetailsDto(null));
+        String requestNullNumberJson = objectMapper.writeValueAsString(requestNullNumber);
+
+        mockMvc.perform(post(url, hotelId, bookingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestNullNumberJson))
+                .andExpect(status().isBadRequest());
+
+
+        BookingPaymentRequest requestTooShortNumber = new BookingPaymentRequest(PaymentMethod.SBP, new SbpDetailsDto("33463"));
+        String requestTooShortNumberJson = objectMapper.writeValueAsString(requestTooShortNumber);
+
+        mockMvc.perform(post(url, hotelId, bookingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestTooShortNumberJson))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void payBooking_ShouldReturnNotFound_WhenBookingDoesNotExist() throws Exception {
+
+        Long hotelId = 2L;
+        Long bookingId = 5L;
+        String url = BASE_URL + "/{hotelId}/booking/{bookingId}/pay";
+
+        BookingPaymentRequest paymentRequest = new BookingPaymentRequest(PaymentMethod.CARD, new CardDetailsDto("1234567812345678", "123"));
+        String paymentJson = objectMapper.writeValueAsString(paymentRequest);
+
+        when(bookingProcessor.processPayment(hotelId, bookingId, paymentRequest)).thenThrow(new EntityNotFoundException("Not found booking by id " + bookingId + " in hotel " + hotelId));
+
+        mockMvc.perform(post(url, hotelId, bookingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(paymentJson))
+                .andExpect(status().isNotFound());
 
     }
 
